@@ -42,6 +42,15 @@ type BuildJob struct {
 //Builds list of sauce builds
 type Builds []Build
 
+//GenerateBuildURL generates direct link to build via stdout
+func (b *Build) GenerateBuildURL() string {
+	if b.ID == "" {
+		return ""
+	}
+
+	return fmt.Sprintf("apps.saucelabs.com/builds/%s", b.ID)
+}
+
 //GetBuilds get all builds for specified user
 func (c *Client) GetBuilds() (*Builds, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/builds", c.BaseURL), nil)

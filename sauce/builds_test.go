@@ -37,7 +37,7 @@ func MockPositiveBuildResponse(w http.ResponseWriter, r *http.Request) {
 			Run:              0,
 			TeamID:           "",
 			GroupID:          "",
-			ID:               "",
+			ID:               "123456",
 		},
 	}
 	w.WriteHeader(http.StatusOK)
@@ -73,5 +73,28 @@ func TestGetBuildsWrongUser(t *testing.T) {
 	_, err := c.GetBuilds()
 	if err != nil {
 		t.Log("Test passed, wrong user")
+	}
+}
+
+func TestGenerateBuildURL(t *testing.T) {
+	s := httptest.NewServer(http.HandlerFunc(MockPositiveBuildResponse))
+
+	defer s.Close()
+
+	c := NewClient(os.Getenv("SAUCE_KEY"), "user", s.URL)
+	val, err := c.GetBuilds()
+	if err == nil {
+		t.Log("Was able to get builds")
+	}
+
+	builds := (*val)
+
+	if len(builds) >= 1 {
+		t.Log("Have more than one build!")
+	}
+
+	url := builds[0].GenerateBuildURL()
+	if url == "apps.saucelabs.com/builds/123456" {
+		t.Log("URL Generated correctly")
 	}
 }
