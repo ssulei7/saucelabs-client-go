@@ -1,3 +1,5 @@
+[![Go Build Validation](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml/badge.svg)](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml)
+
 # Saucelabs Go REST Client
 
 ## Purpose
