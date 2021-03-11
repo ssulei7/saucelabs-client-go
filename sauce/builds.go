@@ -48,7 +48,7 @@ func (b *Build) GenerateBuildURL() string {
 		return ""
 	}
 
-	return fmt.Sprintf("apps.saucelabs.com/builds/%s", b.ID)
+	return fmt.Sprintf("app.saucelabs.com/builds/%s", b.ID)
 }
 
 //GetBuilds get all builds for specified user

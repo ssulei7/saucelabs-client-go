@@ -94,7 +94,7 @@ func TestGenerateBuildURL(t *testing.T) {
 	}
 
 	url := builds[0].GenerateBuildURL()
-	if url == "apps.saucelabs.com/builds/123456" {
+	if url == "app.saucelabs.com/builds/123456" {
 		t.Log("URL Generated correctly")
 	}
 }
