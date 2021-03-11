@@ -1,8 +1,6 @@
-name: Go
+name: Go Build Validation
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -24,14 +22,10 @@ jobs:
     - name: Test
       run: go test -v ./... -coverprofile cover.out
       
-    - name: Output working directory
-      run: ls -a
-      
     - name: Convert coverage.out to coverage.lcov
       uses: jandelgado/gcov2lcov-action@v1.0.6
       with:
-        infile: ./coverage.out
-        working-directory: .
+        infile: cover.out
       
     - name: Coveralls
       uses: coverallsapp/github-action@v1.1.2
