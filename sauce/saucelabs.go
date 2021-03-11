@@ -53,7 +53,7 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 	if res.StatusCode != http.StatusOK {
 		msg, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			return fmt.Errorf("unknown error, status code: %d", res.StatusCode)
+			return fmt.Errorf("cant read body")
 		}
 
 		errRes := errorResponse{
