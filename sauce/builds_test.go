@@ -98,3 +98,29 @@ func TestGenerateBuildURL(t *testing.T) {
 		t.Log("URL Generated correctly")
 	}
 }
+
+func TestGenerateBuildURLFail(t *testing.T) {
+	s := httptest.NewServer(http.HandlerFunc(MockPositiveBuildResponse))
+
+	defer s.Close()
+
+	c := NewClient(os.Getenv("SAUCE_KEY"), "user", s.URL)
+	val, err := c.GetBuilds()
+	if err == nil {
+		t.Log("Was able to get builds")
+	}
+
+	builds := (*val)
+
+	if len(builds) >= 1 {
+		t.Log("Have more than one build!")
+	}
+
+	//change id to empty string
+	builds[0].ID = ""
+
+	url := builds[0].GenerateBuildURL()
+	if url != "app.saucelabs.com/builds/123456" {
+		t.Log("URL failed to generate")
+	}
+}
