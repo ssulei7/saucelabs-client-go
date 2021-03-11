@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 )
 
 const (
-	BaseURL = "https://%s:%s@saucelabs.com/rest/v1/%s"
+	baseURL = "https://%s:%s@saucelabs.com/rest/v1/%s"
 )
 
 //Client representative of saucelabs client
@@ -18,25 +19,22 @@ type Client struct {
 	HTTPClient *http.Client
 }
 
-type HttpClient interface {
-	Do(req *http.Request) (*http.Response, error)
-}
-
 //NewClient Generates new saucelabs client
-func NewClient(apiKey, userName, baseURL string) *Client {
+func NewClient(apiKey, userName, url string) *Client {
 
-	if baseURL == "" {
-		baseURL = fmt.Sprintf(BaseURL, userName, apiKey, userName)
+	if url == "" {
+		url = fmt.Sprintf(baseURL, userName, apiKey, userName)
 	}
 
 	return &Client{
-		BaseURL: baseURL,
+		BaseURL: url,
 		HTTPClient: &http.Client{
 			Timeout: time.Minute,
 		},
 	}
 }
 
+// sauce returns responses as plain text, account for messages here
 type errorResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
@@ -53,12 +51,17 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		var errRes errorResponse
-		if err = json.NewDecoder(res.Body).Decode(&errRes); err == nil {
-			return errors.New(errRes.Message)
+		msg, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return fmt.Errorf("unknown error, status code: %d", res.StatusCode)
 		}
 
-		return fmt.Errorf("unknown error, status code: %d", res.StatusCode)
+		errRes := errorResponse{
+			Code:    res.StatusCode,
+			Message: string(msg),
+		}
+
+		return errors.New(errRes.Message)
 	}
 
 	if err = json.NewDecoder(res.Body).Decode(&v); err != nil {
