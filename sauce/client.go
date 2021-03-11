@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var (
+const (
 	baseURL = "https://%s:%s@saucelabs.com/rest/v1/%s"
 )
 
@@ -23,11 +23,11 @@ type Client struct {
 func NewClient(apiKey, userName, url string) *Client {
 
 	if url == "" {
-		baseURL = fmt.Sprintf(baseURL, userName, apiKey, userName)
+		url = fmt.Sprintf(baseURL, userName, apiKey, userName)
 	}
 
 	return &Client{
-		BaseURL: baseURL,
+		BaseURL: url,
 		HTTPClient: &http.Client{
 			Timeout: time.Minute,
 		},
