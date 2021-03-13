@@ -1,4 +1,4 @@
-[![Go Build Validation](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml/badge.svg)](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml)
+[![Go Build Validation](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml/badge.svg)](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml) [![Coverage Status](https://coveralls.io/repos/github/ssulei7/saucelabs-client-go/badge.svg?branch=main)](https://coveralls.io/github/ssulei7/saucelabs-client-go?branch=main)
 
 # Saucelabs Go REST Client
 
