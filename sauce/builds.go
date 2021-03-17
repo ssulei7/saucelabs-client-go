@@ -52,7 +52,7 @@ func (b *Build) GenerateBuildURL() string {
 }
 
 //GetBuilds get all builds for specified user
-func (c *Client) GetBuilds() (*Builds, error) {
+func (c *Client) GetBuilds() (Builds, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/builds", c.BaseURL), nil)
 	if err != nil {
 		return nil, err
@@ -64,5 +64,5 @@ func (c *Client) GetBuilds() (*Builds, error) {
 		return nil, err
 	}
 
-	return &resp, nil
+	return resp, nil
 }
