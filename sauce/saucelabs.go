@@ -34,12 +34,6 @@ func NewClient(apiKey, userName, url string) *Client {
 	}
 }
 
-// sauce returns responses as plain text, account for messages here
-type errorResponse struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-}
-
 func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 	req.Header.Set("Accept", "application/json")
 
@@ -56,12 +50,7 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 			return fmt.Errorf("cant read body")
 		}
 
-		errRes := errorResponse{
-			Code:    res.StatusCode,
-			Message: string(msg),
-		}
-
-		return errors.New(errRes.Message)
+		return errors.New(string(msg))
 	}
 
 	if err = json.NewDecoder(res.Body).Decode(&v); err != nil {
