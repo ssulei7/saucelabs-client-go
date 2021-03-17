@@ -41,7 +41,7 @@ type Job struct {
 
 type Jobs []Job
 
-func (c *Client) GetJobs() (*Jobs, error) {
+func (c *Client) GetJobs() (Jobs, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/jobs", c.BaseURL), nil)
 	if err != nil {
 		return nil, err
@@ -53,5 +53,5 @@ func (c *Client) GetJobs() (*Jobs, error) {
 		return nil, err
 	}
 
-	return &res, nil
+	return res, nil
 }
