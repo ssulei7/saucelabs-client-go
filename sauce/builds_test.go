@@ -55,12 +55,12 @@ func TestGetBuilds(t *testing.T) {
 	defer s.Close()
 
 	c := NewClient(os.Getenv("SAUCE_KEY"), "user", s.URL)
-	val, err := c.GetBuilds()
+	builds, err := c.GetBuilds()
 	if err == nil {
 		t.Log("Was able to get builds")
 	}
 
-	if (*val)[0].Name == "ExampleBuild" {
+	if builds[0].Name == "ExampleBuild" {
 		t.Log("Got correct build name in slice")
 	}
 }
@@ -82,12 +82,10 @@ func TestGenerateBuildURL(t *testing.T) {
 	defer s.Close()
 
 	c := NewClient(os.Getenv("SAUCE_KEY"), "user", s.URL)
-	val, err := c.GetBuilds()
+	builds, err := c.GetBuilds()
 	if err == nil {
 		t.Log("Was able to get builds")
 	}
-
-	builds := (*val)
 
 	if len(builds) >= 1 {
 		t.Log("Have more than one build!")
@@ -105,12 +103,10 @@ func TestGenerateBuildURLFail(t *testing.T) {
 	defer s.Close()
 
 	c := NewClient(os.Getenv("SAUCE_KEY"), "user", s.URL)
-	val, err := c.GetBuilds()
+	builds, err := c.GetBuilds()
 	if err == nil {
 		t.Log("Was able to get builds")
 	}
-
-	builds := (*val)
 
 	if len(builds) >= 1 {
 		t.Log("Have more than one build!")
