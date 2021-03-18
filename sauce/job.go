@@ -43,13 +43,32 @@ type JobCommandCounts struct {
 	Error int `json:"Error"`
 }
 
+type JobRequestOptions struct {
+	Limit int
+	Skip  int
+}
+
 type Jobs []Job
 
-func (c *Client) GetJobs() (Jobs, error) {
+func (c *Client) GetJobs(options *JobRequestOptions) (Jobs, error) {
+	limit := 100
+	skip := 0
+
+	if options != nil {
+		limit = options.Limit
+		skip = options.Skip
+	}
+
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/jobs", c.BaseURL), nil)
 	if err != nil {
 		return nil, err
 	}
+
+	//add options
+	queryParams := req.URL.Query()
+	queryParams.Add("limit", fmt.Sprint(limit))
+	queryParams.Add("skip", fmt.Sprint(skip))
+	req.URL.RawQuery = queryParams.Encode()
 
 	res := Jobs{}
 
