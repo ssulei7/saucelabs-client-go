@@ -1,10 +1,10 @@
-[![Go Build Validation](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml/badge.svg)](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml) [![Coverage Status](https://coveralls.io/repos/github/ssulei7/saucelabs-client-go/badge.svg?branch=main)](https://coveralls.io/github/ssulei7/saucelabs-client-go?branch=main)
+[![Go Build Validation](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml/badge.svg)](https://github.com/ssulei7/saucelabs-client-go/actions/workflows/go.yml) [![codecov](https://codecov.io/gh/ssulei7/saucelabs-client-go/branch/main/graph/badge.svg?token=SSD5JHOL1P)](https://codecov.io/gh/ssulei7/saucelabs-client-go)
 
 # Saucelabs Go REST Client
 
 ## Purpose
 
-A general client that I am currently working on to pull job information within my CI/CD execution
+A general client to interface with the SauceLabs API with Go. 
 
 ## APIs Covered
 
@@ -16,13 +16,14 @@ A general client that I am currently working on to pull job information within m
 
 * Get all jobs /rest/v1/user/jobs
 
+
 ### Example
 
 ```go
 
 func main() {
     //provide a sauce key and username in which to retrieve information from
-    c := sauce.NewClient(os.Getenv("SAUCE_KEY", "username")
+    c := sauce.NewClient(os.Getenv("SAUCE_KEY"), os.Getenv("SAUCE_USER"), "base url, leave empty string for default")
     
     //retrieve builds, for example...
     builds, err := c.GetBuilds()
