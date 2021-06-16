@@ -44,17 +44,6 @@ func TestCreateRequestValidBody(t *testing.T) {
 	}
 }
 
-func TestCreateRequestInvalid(t *testing.T) {
-	c := NewClient("test", "test", "")
-
-	//create a invalid request
-	req := c.buildRequest("SOMEMETHOD", fmt.Sprintf("%s/builds", c.BaseURL), nil)
-
-	if req == nil {
-		t.Log("TEST PASSED: Request was invalid and error handling occurred")
-	}
-}
-
 func TestClientBadRequest(t *testing.T) {
 	c := NewClient("test", "test", "")
 	err := c.sendRequest(http.NewRequest("POST", "", nil))

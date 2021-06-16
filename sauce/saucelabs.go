@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -38,17 +37,11 @@ func NewClient(apiKey, userName, url string) *Client {
 
 func (c *Client) buildRequest(method, endpoint string, body io.Reader) *http.Request {
 	var req *http.Request
-	var err error
 
 	if body == nil {
-		req, err = http.NewRequest(method, endpoint, nil)
+		req, _ = http.NewRequest(method, endpoint, nil)
 	} else {
-		req, err = http.NewRequest(method, endpoint, body)
-	}
-
-	//check if request built without error
-	if err != nil {
-		log.Fatal(err)
+		req, _ = http.NewRequest(method, endpoint, body)
 	}
 
 	return req
