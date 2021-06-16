@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 )
@@ -32,6 +34,24 @@ func NewClient(apiKey, userName, url string) *Client {
 			Timeout: time.Minute,
 		},
 	}
+}
+
+func (c *Client) buildRequest(method, endpoint string, body io.Reader) *http.Request {
+	var req *http.Request
+	var err error
+
+	if body == nil {
+		req, err = http.NewRequest(method, endpoint, nil)
+	} else {
+		req, err = http.NewRequest(method, endpoint, body)
+	}
+
+	//check if request built without error
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return req
 }
 
 func (c *Client) sendRequest(req *http.Request, v interface{}) error {
