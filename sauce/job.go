@@ -2,7 +2,6 @@ package sauce
 
 import (
 	"fmt"
-	"net/http"
 )
 
 type Job struct {
@@ -59,10 +58,7 @@ func (c *Client) GetJobs(options *JobRequestOptions) (Jobs, error) {
 		skip = options.Skip
 	}
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/jobs", c.BaseURL), nil)
-	if err != nil {
-		return nil, err
-	}
+	req := c.buildRequest("GET", fmt.Sprintf("%s/jobs", c.BaseURL), nil)
 
 	//add options
 	queryParams := req.URL.Query()
