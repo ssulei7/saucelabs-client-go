@@ -2,3 +2,4 @@ cover.out
 .vscode
 sonar.properties
 .scannerwork
+main.go

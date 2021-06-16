@@ -2,7 +2,6 @@ package sauce
 
 import (
 	"fmt"
-	"net/http"
 )
 
 //Build .. information of a sauce build
@@ -53,16 +52,10 @@ func (b *Build) GenerateBuildURL() string {
 
 //GetBuilds get all builds for specified user
 func (c *Client) GetBuilds() (Builds, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/builds", c.BaseURL), nil)
-	if err != nil {
-		return nil, err
-	}
-
 	resp := Builds{}
-
+	req := c.buildRequest("GET", fmt.Sprintf("%s/builds", c.BaseURL), nil)
 	if err := c.sendRequest(req, &resp); err != nil {
 		return nil, err
 	}
-
 	return resp, nil
 }
