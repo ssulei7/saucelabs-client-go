@@ -2,10 +2,8 @@ package sauce
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"time"
 )
@@ -58,12 +56,7 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		msg, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			return fmt.Errorf("cant read body")
-		}
-
-		return errors.New(string(msg))
+		return fmt.Errorf("request failed with status code: " + fmt.Sprint(res.StatusCode))
 	}
 
 	if err = json.NewDecoder(res.Body).Decode(&v); err != nil {
