@@ -3,6 +3,8 @@ package sauce
 import (
 	"fmt"
 	"net/http"
+	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 )
@@ -49,5 +51,29 @@ func TestClientBadRequest(t *testing.T) {
 	err := c.sendRequest(http.NewRequest("POST", "", nil))
 	if err != nil {
 		t.Log("Sent bad request")
+	}
+}
+
+func TestClientInvalidRespBody(t *testing.T) {
+	//use builds as an example
+
+	s := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+
+		//return something invalid
+		rw.Write([]byte("some random byte data that isn't json"))
+	}))
+
+	defer s.Close()
+
+	c := NewClient(os.Getenv("SAUCE_KEY"), "user", s.URL)
+
+	builds := Builds{}
+
+	req := c.buildRequest("GET", fmt.Sprintf("%s/builds", c.BaseURL), nil)
+
+	err := c.sendRequest(req, builds)
+
+	if err != nil {
+		t.Log("this failed")
 	}
 }
