@@ -1,6 +1,8 @@
 package sauce
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
@@ -33,37 +35,37 @@ type Job struct {
 }
 
 type JobDetails struct {
-	BrowserShortVersion   string        `json:"browser_short_version"`
-	VideoURL              string        `json:"video_url"`
-	CreationTime          int           `json:"creation_time"`
-	CustomData            interface{}   `json:"custom-data"`
-	BrowserVersion        string        `json:"browser_version"`
-	Owner                 string        `json:"owner"`
-	AutomationBackend     string        `json:"automation_backend"`
-	ID                    string        `json:"id"`
-	CollectsAutomatorLog  bool          `json:"collects_automator_log"`
-	RecordScreenshots     bool          `json:"record_screenshots"`
-	RecordVideo           bool          `json:"record_video"`
-	Build                 interface{}   `json:"build"`
-	Passed                interface{}   `json:"passed"`
-	Public                string        `json:"public"`
-	AssignedTunnelID      interface{}   `json:"assigned_tunnel_id"`
-	Status                string        `json:"status"`
-	LogURL                string        `json:"log_url"`
-	StartTime             int           `json:"start_time"`
-	Proxied               bool          `json:"proxied"`
-	ModificationTime      int           `json:"modification_time"`
-	Tags                  []interface{} `json:"tags"`
-	Name                  interface{}   `json:"name"`
-	CommandsNotSuccessful int           `json:"commands_not_successful"`
-	ConsolidatedStatus    string        `json:"consolidated_status"`
-	SeleniumVersion       interface{}   `json:"selenium_version"`
-	Manual                bool          `json:"manual"`
-	EndTime               int           `json:"end_time"`
-	Error                 string        `json:"error"`
-	Os                    string        `json:"os"`
-	Breakpointed          interface{}   `json:"breakpointed"`
-	Browser               string        `json:"browser"`
+	BrowserShortVersion   string        `json:"browser_short_version,omitempty"`
+	VideoURL              string        `json:"video_url,omitempty"`
+	CreationTime          int           `json:"creation_time,omitempty"`
+	CustomData            interface{}   `json:"custom-data,omitempty"`
+	BrowserVersion        string        `json:"browser_version,omitempty"`
+	Owner                 string        `json:"owner,omitempty"`
+	AutomationBackend     string        `json:"automation_backend,omitempty"`
+	ID                    string        `json:"id,omitempty"`
+	CollectsAutomatorLog  bool          `json:"collects_automator_log,omitempty"`
+	RecordScreenshots     bool          `json:"record_screenshots,omitempty"`
+	RecordVideo           bool          `json:"record_video,omitempty"`
+	Build                 interface{}   `json:"build,omitempty"`
+	Passed                interface{}   `json:"passed,omitempty"`
+	Public                string        `json:"public,omitempty"`
+	AssignedTunnelID      interface{}   `json:"assigned_tunnel_id,omitempty"`
+	Status                string        `json:"status,omitempty"`
+	LogURL                string        `json:"log_url,omitempty"`
+	StartTime             int           `json:"start_time,omitempty"`
+	Proxied               bool          `json:"proxied,omitempty"`
+	ModificationTime      int           `json:"modification_time,omitempty"`
+	Tags                  []interface{} `json:"tags,omitempty"`
+	Name                  interface{}   `json:"name,omitempty"`
+	CommandsNotSuccessful int           `json:"commands_not_successful,omitempty"`
+	ConsolidatedStatus    string        `json:"consolidated_status,omitempty"`
+	SeleniumVersion       interface{}   `json:"selenium_version,omitempty"`
+	Manual                bool          `json:"manual,omitempty"`
+	EndTime               int           `json:"end_time,omitempty"`
+	Error                 string        `json:"error,omitempty"`
+	Os                    string        `json:"os,omitempty"`
+	Breakpointed          interface{}   `json:"breakpointed,omitempty"`
+	Browser               string        `json:"browser,omitempty"`
 }
 
 type JobSauceOptions struct {
@@ -120,5 +122,20 @@ func (c *Client) GetJobDetails(id string) (*JobDetails, error) {
 		return nil, err
 	}
 
+	return res, nil
+}
+
+func (c *Client) UpdateJob(id string, updatedDetails *JobDetails) (*JobDetails, error) {
+	json, err := json.Marshal(updatedDetails)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req := c.buildRequest("PUT", fmt.Sprintf("%s/jobs/%s", c.BaseURL, id), bytes.NewReader(json))
+	res := &JobDetails{}
+	if err := c.sendRequest(req, res); err != nil {
+		return nil, err
+	}
 	return res, nil
 }
