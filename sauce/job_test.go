@@ -204,9 +204,6 @@ func TestUpdateJob(t *testing.T) {
 
 	c := NewClient(os.Getenv("SAUCE_KEY"), "test", s.URL)
 
-	customData := make(map[string]interface{})
-	customData["oldtest"] = true
-
 	updatedJobDetails := JobDetails{
 		VideoURL: "stuff",
 	}
@@ -215,6 +212,28 @@ func TestUpdateJob(t *testing.T) {
 
 	if err == nil && val != nil {
 		t.Log("Approrpriate values returned")
+	}
+
+}
+
+func TestUpdateJobFail(t *testing.T) {
+	s := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		rw.Write([]byte("Not able to update job"))
+		rw.WriteHeader(http.StatusBadRequest)
+	}))
+
+	defer s.Close()
+
+	c := NewClient(os.Getenv("SAUCE_KEY"), "test", s.URL)
+
+	updatedJobDetails := JobDetails{
+		VideoURL: "someurl",
+	}
+
+	val, err := c.UpdateJob("123", &updatedJobDetails)
+
+	if err != nil && val == nil {
+		t.Log("Successfully failed")
 	}
 
 }
