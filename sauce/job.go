@@ -126,11 +126,7 @@ func (c *Client) GetJobDetails(id string) (*JobDetails, error) {
 }
 
 func (c *Client) UpdateJob(id string, updatedDetails *JobDetails) (*JobDetails, error) {
-	json, err := json.Marshal(updatedDetails)
-
-	if err != nil {
-		return nil, err
-	}
+	json, _ := json.Marshal(updatedDetails)
 
 	req := c.buildRequest("PUT", fmt.Sprintf("%s/jobs/%s", c.BaseURL, id), bytes.NewReader(json))
 	res := &JobDetails{}
